@@ -1,0 +1,46 @@
+function orbitalPeriod = orbital(x,y,t)
+
+k = y(1)/x(1);
+if y(1) == 0
+    kxm=@(x)0;
+else
+    kxm=@(x)k*x;
+end
+prevOrbitalEndTimePosition = 1;
+n=1;
+orbitalPeriod = 0;
+
+if kxm(x(2)) < y(2)
+    startPosition = 1;
+    prevPosition = 1;
+else
+    startPosition = -1;
+    prevPosition = -1;
+end
+
+for i = 2:size(x)
+    if kxm(x(i)) < y(i)
+        position = 1;
+    else
+        position = -1;
+    end
+    
+    if position ~= prevPosition
+        if position == startPosition
+            if prevOrbitalEndTimePosition == 1
+                orbitalPeriod(n) = (t(i)+t(i-1))/2-t(prevOrbitalEndTimePosition);
+            else
+                orbitalPeriod(n) = (t(i)+t(i-1))/2-(t(prevOrbitalEndTimePosition)+t(prevOrbitalEndTimePosition-1))/2;
+            end
+            i
+            prevOrbitalEndTimePosition = i;
+            n=n+1;
+            prevPosition = position;
+        else
+            prevPosition = position;
+        end
+    end
+    
+end
+
+end

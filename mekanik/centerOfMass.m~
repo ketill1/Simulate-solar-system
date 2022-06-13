@@ -1,0 +1,21 @@
+%starting point for a function calculating center of mass for a system of
+%several bodies
+function [rcmx,rcmy]=centerOfMass(m,x,y)
+
+n=size(x,1);
+N=size(m,2);
+totM = 0;
+
+rcmx=zeros(n,1);
+rcmy=zeros(n,1);
+
+for j=1:N %planets      
+        totM=totM + m(j);   
+end
+for i=1:n
+    for j=1:N %planets     
+        rcmx(i)=rcmx(i)+m(j)*x(i,j)/totM;
+        rcmy(i)=rcmy(i)+m(j)*y(i,j)/totM;    
+    end
+end
+end

@@ -1,0 +1,25 @@
+function [ax,ay]=acceleration(G,m,x,y)
+
+n=size(x,1);
+N=size(m,1);
+r=@(x1,x2,y1,y2)sqrt((x1-x2)^2+(y1-y2)^2);
+
+
+acx=@(i,j,k)-G*m(k)*((x(i,j)-x(i,k))/  r(x(i,j),x(i,k),y(i,j),y(i,k))^3);
+acy=@(i,j,k)-G*m(k)*((y(i,j)-y(i,k))/  r(x(i,j),y(i,j))^3);
+
+for j = 1:N
+    
+    for k = 1:j-1
+        for i=1:n
+            
+            ax(i,j)=ax(i,j)+ acx(i,j,k);
+            ay(i,j)=ay(i,j)+ acy(i,j,k);
+        end
+    end
+    for k = j+1:N
+        ax(i,j)=ax(i,j)+ acx(i,j,k);
+            ay(i,j)=ay(i,j)+ acy(i,j,k);
+    end
+    
+end

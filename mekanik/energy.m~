@@ -1,0 +1,26 @@
+function [Ek,Ep,Etot]=energy(G,m,x,y,vx,vy)
+n=size(x,1);
+N=size(x,2);
+Ek=zeros(n,1);
+Ep=zeros(n,1);
+Etot=zeros(n,1);
+r=@(x1,x2,y1,y2)sqrt((x1-x2)^2+(y1-y2)^2);
+v=@(x,y)sqrt(x^2+y^2);
+
+for j=1:N
+
+    for i=1:n
+    Ek(i,1)=Ek(i,1)+(m(j)*((v(vx(i,j),vy(i,j)))^2))/2; % momentum
+    end
+end
+
+for j=1:N
+    for k = j+1:N
+        for i=1:n
+            Ep(i,1) = Ep(i,1) - G*m(j)*m(k)/r(x(i,j),x(i,k),y(),y());
+        end
+    end
+end
+
+% Ep(i)=-G*(m(1)*m(2)/(r(x(i),y(i))));
+%     Etot(i)=Ek(i)+Ep(i);

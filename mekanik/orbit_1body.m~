@@ -1,0 +1,43 @@
+%starting point for a simple simulation program
+function [x,y,vx,vy,ax,ay,t]=orbit_1body(G,m,x0,y0,vx0,vy0,dt,tmax)
+
+%Calculating time steps
+t = 0:dt:tmax;
+t=t';
+steps=floor(tmax/dt);
+
+%preallocate memory (increases performance)
+x=zeros(steps,1);
+y=zeros(steps,1);
+vx=zeros(steps,1);
+vy=zeros(steps,1);
+ax=zeros(steps,1);
+ay=zeros(steps,1);
+
+%set initial conditions
+x(1)=x0;
+    y(1)=y0;
+    vx(1)=vx0;
+    vy(1)=vy0;
+    
+% define a function for calculating the distance between two points
+r=@(x,y)sqrt(x^2+y^2);
+    
+%define functions for calculating acceleration based on position
+acx=@(x,y)-G*m*(x/r(x,y));
+acy=@(x,y)-G*m*(y/r(x,y));
+
+ax(1)=acx(x0,y0);
+ay(1)=acy(x0,y0);
+
+%simulate orbit
+for i=1:steps
+    x(i+1)=x(i)+vx(i)*dt+(ax(i)*dt^2)/2; % update position
+        y(i+1)=y(i)+vy(i)*dt+(ay(i)*dt^2)/2;
+        ax(i+1)= acx(x(i),y(i)); % update acceleration
+        ay(i+1)= acy(x(i),y(i));%
+        vx(i+1)= vx(i)+1/2*(ax(i)+ax(i+1))*dt; % update velocity
+        vy(i+1)= vy(i)+ay(i)*dt;%
+        
+end
+end

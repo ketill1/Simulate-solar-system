@@ -1,0 +1,42 @@
+%starting point for a simple simulation program
+function [x,y,vx,vy,ax,ay,t]=orbit_Nbody(G,m,x0,y0,vx0,vy0,dt,tmax)
+
+%Calculating time steps
+t = 0:dt:tmax;
+t=t';
+steps=floor(tmax/dt);
+N=size(m,2);
+
+%preallocate memory (increases performance)
+x=zeros(steps,N);
+y=zeros(steps,N);
+vx=zeros(steps,N);
+vy=zeros(steps,N);
+ax=zeros(steps,N);
+ay=zeros(steps,N);
+
+%set initial conditions
+
+    x(1,:)=x0;
+    y(1,:)=y0;
+    vx(1,:)=vx0;
+    vy(1,:)=vy0;
+    
+    
+%define functions for calculating acceleration based on position
+
+[ax(1,:),ay(1,:)]=acceleration(G,m,x(1,:),y(1,:));
+
+%simulate orbit
+    for i=1:steps
+        if mod(i,10000) == 0
+            i 
+        end
+        x(i+1,:)=x(i,:)+vx(i,:).*dt+(ax(i,:).*dt.^2)./2; % update position
+        y(i+1,:)=y(i,:)+vy(i,:).*dt+(ay(i,:).*dt.^2)./2;
+        [ax(i+1,:),ay(i+1,:)]=acceleration(G,m,x(i,:),y(i,:));
+        vx(i+1,:)= vx(i,:)+1./2.*(ax(i,:)+ax(i+1,:)).*dt; % update velocity
+        vy(i+1,:)= vy(i,:)+1./2.*(ay(i,:)+ay(i+1,:)).*dt;%
+    end
+
+end

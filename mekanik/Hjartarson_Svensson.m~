@@ -1,0 +1,83 @@
+hold off
+G=1;
+m=[0.01;10];
+x0=10;
+y0=0;
+vx0=0;
+vy0=0.3;
+tmax=100;
+dt=0.0001;
+
+[x,y,vx,vy,ax,ay,t]=orbit_1body(G,m(2),x0,y0,vx0,vy0,dt,tmax);
+k = y(1)/x(1);
+kxm=@(x)k*x;
+
+close all
+figure(1)
+axis image
+plot(x,y)
+hold on
+% fplot(kxm)
+smallax = splitter(ax,10);
+smallay = splitter(ay,10);
+smallx = splitter(x,10);
+smally = splitter(y,10);
+smallvx = splitter(vx,10);
+smallvy = splitter(vy,10);
+quiver(smallx,smally,smallvx,smallvy,0.5);
+quiver(smallx,smally,smallax,smallay,0.5);
+plot(0,0,'o')
+y2=zeros(size(y,1),1);
+x2=zeros(size(x,1),1);
+[rcmx,rcmy]=centerOfMass(m,[x x2],[y y2]);
+plot(rcmx,rcmy)
+hold off
+
+[Ek,Ep,Etot]=energy(G,m,x,y,vx,vy);
+
+figure(2)
+plot(t,Ek)
+hold on
+% figure(3)
+plot(t,Ep)
+
+% figure(4)
+plot(t,Etot)
+orbitalPeriod = orbital(x,y,t);
+
+%%Nbody
+hold off
+G=1;
+m=[10,0.01];
+x0=[0,10];
+y0=[0,0];
+vx0=[0,0];
+vy0=[0,0.75];
+tmax=80;
+dt=0.01;
+
+[x,y,vx,vy,ax,ay,t]=orbit_Nbody(G,m,x0,y0,vx0,vy0,dt,tmax)
+
+%%
+figure(1)
+axis image
+plot(x(:,1),y())
+hold on
+% fplot(kxm)
+plot(0,0,'o')
+y2=zeros(size(y,1),1);
+x2=zeros(size(x,1),1);
+[rcmx,rcmy]=centerOfMass(m,[x x2],[y y2]);
+plot(rcmx,rcmy)
+hold off
+
+[Ek,Ep,Etot]=energy(G,m,x,y,vx,vy);
+
+figure(2)
+plot(t,Ek)
+hold on
+% figure(3)
+plot(t,Ep)
+
+% figure(4)
+plot(t,Etot)

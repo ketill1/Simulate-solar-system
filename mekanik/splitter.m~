@@ -1,0 +1,14 @@
+%starting point for a function taking n evenly split point
+%from a vector v and making a new
+function smallsize = splitter(v,n)
+
+dv=floor(size(v,1)/n);
+smallsize = zeros(n,1);
+
+smallsize(1)=v(1);
+
+for i= 2:n
+    smallsize(i) = v(dv*i);
+end
+
+end
